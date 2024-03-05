@@ -1,3 +1,7 @@
+# [语雀面试集合，点击查看](https://www.yuque.com/12312wo/xqvhf0/gorg4wsw1vzt2kp5)
+
+# 自我总结![alt text](24A2BC1D.png)
+
 # vue相关
 
 * [nextTick](#nexttick)
@@ -33,28 +37,7 @@
 
         - `setTimeout`：作为浏览器提供的通用异步机制，可能会稍微低效一些，因为它将任务添加到了浏览器的异步队列中，没有像 $nextTick 那样与 Vue 更新周期相关联。
 
-### 原理
-
-* 微任务
-  
-        Vue 在更新 DOM 时使用微任务队列，通常使用 Promise 或者 MutationObserver 来模拟微任务。
-
-* 调度器
-
-        Vue 内部有一个调度器，它负责管理 Vue 的异步队列。当你调用 $nextTick 方法时，实际上是向这个调度器添加一个回调函数。
-
-* 更新队列
-
-        Vue 使用更新队列来收集所有需要异步执行的 DOM 更新操作。
-
-* 触发更新
-
-        在合适的时机，Vue 会触发更新队列中的回调函数执行，通常是在当前 JavaScript 执行栈执行完毕之后。
-* DOM 更新
-
-        在执行更新队列中的回调函数时，Vue 已经确保 DOM 已经更新完成，因此你可以放心地在回调函数中操作 DOM。
-
-  简而言之，$nextTick 的实现原理就是将回调函数添加到 Vue 的异步队列中，在适当的时机执行这些回调函数，以确保在 DOM 更新完成后执行相应的操作。这种机制保证了 Vue 的响应性和高效性，同时也能够避免一些潜在的异步更新问题。
+  nextTick 的核心是利用了如 Promise 、MutationObserver、setImmediate、setTimeout的原生 JavaScript 方法来模拟对应的微/宏任务的实现，本质是为了利用 JavaScript 的这些异步回调任务队列来实现 Vue 框架中自己的异步回调队列。简而言之，$nextTick 的实现原理就是将回调函数添加到 Vue 的异步队列中，在适当的时机执行这些回调函数，以确保在 DOM 更新完成后执行相应的操作。这种机制保证了 Vue 的响应性和高效性，同时也能够避免一些潜在的异步更新问题。
 
 ## diff相关问题
 
@@ -103,6 +86,10 @@
 * 组件缓存：当使用 keep-alive 包裹一个组件时，该组件在被激活后不会被销毁，而是会被缓存起来。这意味着当组件被切换到其他组件后，它的状态和 DOM 结构不会丢失，只是被隐藏了起来。
 
 * 缓存对象采用了 LRUCache（Least Recently Used，最近最少使用）算法，确保当缓存空间达到一定限制时，会自动销毁最久未被使用的组件实例，以释放内存。
+
+[查看语雀keep-alive](https://www.yuque.com/12312wo/xqvhf0/gorg4wsw1vzt2kp5#f37626a7)
+
+缓存渲染的时候，会根据 vnode.componentInstance（首次渲染 vnode.componentInstance 为 undefined） 和 keepAlive 属性判断不会执行组件的 created、mounted 等钩子函数，而是对缓存的组件执行 patch 过程∶ 直接把缓存的 DOM 对象直接插入到目标元素中，完成了数据更新的情况下的渲染过程。
 
 ## 路由
 
